@@ -1,0 +1,57 @@
+import cv2
+import numpy as np
+import pandas as pd
+
+# Data Preprocessing
+data = pd.read_csv("data.csv")
+# perform necessary preprocessing steps
+
+# Image Extraction
+img = cv2.imread("image.jpg")
+cv2.imshow("Original Image", img)
+cv2.waitKey(0)
+
+# Top Hat Filter
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (9,9))
+tophat = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, kernel)
+cv2.imshow("Top Hat Filtered Image", tophat)
+cv2.waitKey(0)
+
+# Bottom Hat Filter
+bottomhat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, kernel)
+cv2.imshow("Bottom Hat Filtered Image", bottomhat)
+cv2.waitKey(0)
+
+# Combined Filter
+combined = cv2.bitwise_xor(tophat, bottomhat)
+cv2.imshow("Combined Filtered Image", combined)
+cv2.waitKey(0)
+
+# 3D Median Filter
+img3D = cv2.imread("image.jpg")
+median = cv2.medianBlur(img3D, 5)
+cv2.imshow("3D Median Filtered Image", median)
+cv2.waitKey(0)
+
+# HSV Filter
+hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+lower_range = np.array([0, 50, 50])
+upper_range = np.array([10, 255, 255])
+mask = cv2.inRange(hsv, lower_range, upper_range)
+res = cv2.bitwise_and(img, img, mask=mask)
+cv2.imshow("HSV Filtered Image", res)
+cv2.waitKey(0)
+
+# RGB to Grayscale Filter
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+cv2.imshow("Grayscale Image", gray)
+cv2.waitKey(0)
+
+# Morphological Filter
+kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5,5))
+morph = cv2.morphologyEx(gray, cv2.MORPH_GRADIENT, kernel)
+cv2.imshow("Morphological Filtered Image", morph)
+cv2.waitKey(0)
+
+cv2.destroyAllWindows()
